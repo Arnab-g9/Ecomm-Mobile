@@ -15,6 +15,8 @@ import SPText from '../components/SPText';
 import SPTextInput from '../components/SPTextInput';
 import SPThemeBtn from '../components/SPThemeBtn';
 import {CountryPicker} from 'react-native-country-codes-picker';
+import CountryFlag from "react-native-country-flag";
+
 
 interface IRegisterProps {
   emailValue: string;
@@ -24,7 +26,7 @@ interface IRegisterProps {
   phnoValue: string;
   phnoError: string;
   showCountryPickerModal: boolean;
-  countryCode: string;
+  countryCodeObj: any ;
 }
 
 const Signup = () => {
@@ -37,12 +39,12 @@ const Signup = () => {
       phnoValue: '',
       phnoError: '',
       showCountryPickerModal: false,
-      countryCode: '',
+      countryCodeObj: null,
     });
   console.log(
     registerCradentials.emailValue,
     registerCradentials.passwordValue,
-    registerCradentials.countryCode,
+    registerCradentials.countryCodeObj,
     registerCradentials.phnoValue,
     registerCradentials.showCountryPickerModal,
   );
@@ -158,8 +160,11 @@ const Signup = () => {
                   showCountryPickerModal: true,
                 })
               }>
-              {registerCradentials.countryCode ? (
-                <SPText>{registerCradentials.countryCode}</SPText>
+              {registerCradentials.countryCodeObj ? (
+                <View style={{gap:5, flexDirection: 'row', alignItems: 'center'}}>
+                <CountryFlag isoCode={registerCradentials.countryCodeObj.code} size={16} />
+                <SPText>{registerCradentials.countryCodeObj.dial_code}</SPText>
+                </View>
               ) : (
                 <>
                   <CustomSvg
@@ -200,20 +205,20 @@ const Signup = () => {
             fontSize: responsiveFont(15),
           }}
         />
-      </View>
-      {/* Here is the country picker modal */}
-      <CountryPicker
+         {/* Here is the country picker modal */}
+         <CountryPicker
         show={registerCradentials.showCountryPickerModal}
         // when picker button press you will get the country object with dial code
         pickerButtonOnPress={item => {
           setRegisterCradentials({
             ...registerCradentials,
-            countryCode: item,
+            countryCodeObj: item,
             showCountryPickerModal: false,
           });
         }}
         lang={''}
       />
+      </View>
     </View>
   );
 };
